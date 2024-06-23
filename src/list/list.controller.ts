@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
 @Controller('list')
 export class ListController {
@@ -29,6 +29,13 @@ export class ListController {
             message: "Success",
             id: id,
             body:body
+        }
+    }
+    @Delete(':id')
+    removeTask(@Param('id') id: string){
+        return {
+            message: "Success",
+            id: id,
         }
     }
 }
