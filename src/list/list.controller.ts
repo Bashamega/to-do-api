@@ -24,7 +24,7 @@ export class ListController {
         }
     }
     @Patch(':id')
-    updateTask(id: string, body){
+    updateTask(@Param('id') id: string, @Body() body){
         return {
             message: "Success",
             id: id,
