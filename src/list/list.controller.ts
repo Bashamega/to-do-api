@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 
 @Controller('list')
 export class ListController {
@@ -21,6 +21,14 @@ export class ListController {
         return {
             massege: "Data recieved",
             content: body
+        }
+    }
+    @Patch(':id')
+    updateTask(id: string, body){
+        return {
+            message: "Success",
+            id: id,
+            body:body
         }
     }
 }
