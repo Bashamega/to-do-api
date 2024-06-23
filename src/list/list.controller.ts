@@ -12,6 +12,7 @@ export class ListController {
     specificTask(@Param('id') id:string){
         return {
             id: id,
+            message: "Found",
             content: "Content"
         }
     }
