@@ -19,7 +19,7 @@ export class ListController {
     @Post()
     addNewTask(@Body() body){
         return {
-            massege: "Data recieved",
+            message: "Data recieved",
             content: body
         }
     }
