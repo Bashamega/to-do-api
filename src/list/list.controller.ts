@@ -61,7 +61,9 @@ export class ListController {
   updateTask(@Param('id') id: number, @Body() body) {
     if (isTask(body)) {
       if (this.listService.findTask(id)) {
-        if(id != body.id && this.listService.findTask(id)){ return;}
+        if (id != body.id && this.listService.findTask(id)) {
+          return;
+        }
         this.listService.update(id, body);
         return {
           message: 'Data update',
@@ -85,10 +87,16 @@ export class ListController {
     }
   }
   @Delete(':id')
-  removeTask(@Param('id') id: string) {
-    return {
-      message: 'Success',
-      id: id,
-    };
+  removeTask(@Param('id') id: number) {
+    if (this.listService.findTask(id)) {
+      this.listService.removeTask(id)
+      return {
+        message:'data removed'
+      }
+    } else {
+      throw new BadRequestException({
+        message: 'Please enter a valid id.',
+      });
+    }
   }
 }
