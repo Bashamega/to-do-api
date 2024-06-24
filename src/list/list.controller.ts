@@ -89,10 +89,10 @@ export class ListController {
   @Delete(':id')
   removeTask(@Param('id') id: number) {
     if (this.listService.findTask(id)) {
-      this.listService.removeTask(id)
+      this.listService.removeTask(id);
       return {
-        message:'data removed'
-      }
+        message: 'data removed',
+      };
     } else {
       throw new BadRequestException({
         message: 'Please enter a valid id.',
