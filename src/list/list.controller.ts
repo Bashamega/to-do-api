@@ -58,12 +58,31 @@ export class ListController {
     }
   }
   @Patch(':id')
-  updateTask(@Param('id') id: string, @Body() body) {
-    return {
-      message: 'Success',
-      id: id,
-      body: body,
-    };
+  updateTask(@Param('id') id: number, @Body() body) {
+    if (isTask(body)) {
+      if (this.listService.findTask(id)) {
+        if(id != body.id && this.listService.findTask(id)){ return;}
+        this.listService.update(id, body);
+        return {
+          message: 'Data update',
+          content: body,
+        };
+      } else {
+        throw new BadRequestException({
+          message: 'Please enter a valid id.',
+        });
+      }
+    } else {
+      throw new BadRequestException({
+        message: 'Please enter a valid body',
+        expectedBody: {
+          id: 'number',
+          title: 'string',
+          description: 'string',
+          done: 'boolean',
+        },
+      });
+    }
   }
   @Delete(':id')
   removeTask(@Param('id') id: string) {
