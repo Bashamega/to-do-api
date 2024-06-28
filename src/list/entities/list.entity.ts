@@ -1,7 +1,14 @@
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity('tasks-db')
 export class Task {
+  @PrimaryGeneratedColumn()
   id: number;
+  @Column()
   title: string;
+  @Column()
   description: string;
+  @Column()
   done: boolean;
 
   constructor(id: number, title: string, description: string, done: boolean) {
@@ -11,6 +18,7 @@ export class Task {
     this.done = done;
   }
 }
+
 export function isTask(obj: any): obj is Task {
   return (
     obj &&
