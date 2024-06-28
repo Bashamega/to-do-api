@@ -34,8 +34,7 @@ export class ListController {
   @Post()
   async addNewTask(@Body() body: Task) {
     if (isTask(body)) {
-      
-      if (!await this.listService.taskExist(body.id)) {
+      if (!(await this.listService.taskExist(body.id))) {
         await this.listService.createTask(body);
         return {
           message: 'Data recieved',
@@ -62,7 +61,7 @@ export class ListController {
   async updateTask(@Param('id') id: number, @Body() body) {
     if (isTask(body)) {
       if (await this.listService.getTaskById(id)) {
-        if (id != body.id && await this.listService.taskExist(id)) {
+        if (id != body.id && (await this.listService.taskExist(id))) {
           throw new BadRequestException({
             message: 'Please enter a valid id.',
           });

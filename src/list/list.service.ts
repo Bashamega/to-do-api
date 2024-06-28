@@ -13,17 +13,17 @@ export class ListService {
   async getTasks(): Promise<number[]> {
     const data = await this.listRepository.find();
     const keys = [];
-    data.forEach(item=>keys.push(item.id))
+    data.forEach((item) => keys.push(item.id));
     return keys;
   }
 
-  async getTaskById(id: number){
+  async getTaskById(id: number) {
     const task = await this.listRepository.findOne({ where: { id } });
     return task;
   }
-  async taskExist(id:number){
-    const data = await this.getTaskById(id)
-    return data
+  async taskExist(id: number) {
+    const data = await this.getTaskById(id);
+    return data;
   }
 
   async createTask(task: Task): Promise<Task> {
