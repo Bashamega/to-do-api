@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ListController } from './list/list.controller';
 import { ListService } from './list/list.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ListModule } from './list/list.module';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'postgres',
@@ -14,7 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     database: 'postgres',
     autoLoadEntities: true,
     synchronize: true
-  })],
+  }), ListModule],
   controllers: [AppController, ListController],
   providers: [AppService, ListService],
 })
