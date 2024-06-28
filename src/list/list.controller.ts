@@ -15,15 +15,15 @@ export class ListController {
   constructor(private readonly listService: ListService) {}
   @Get()
   allTasks() {
-    return this.listService.tasks();
+    return this.listService.getTasks();
   }
   @Get(':id')
-  specificTask(@Param('id') id: number) {
-    if (this.listService.findTask(id)) {
+  async specificTask(@Param('id') id: number) {
+    if (await this.listService.taskExist(id)) {
       return {
         id: id,
         message: 'Found',
-        content: this.listService.findTask(id),
+        content: await this.listService.getTaskById(id),
       };
     } else {
       throw new BadRequestException({
@@ -32,10 +32,11 @@ export class ListController {
     }
   }
   @Post()
-  addNewTask(@Body() body: Task) {
+  async addNewTask(@Body() body: Task) {
     if (isTask(body)) {
-      if (!this.listService.findTask(body.id)) {
-        this.listService.createTask(body);
+      
+      if (!await this.listService.taskExist(body.id)) {
+        await this.listService.createTask(body);
         return {
           message: 'Data recieved',
           content: body,
@@ -58,13 +59,15 @@ export class ListController {
     }
   }
   @Patch(':id')
-  updateTask(@Param('id') id: number, @Body() body) {
+  async updateTask(@Param('id') id: number, @Body() body) {
     if (isTask(body)) {
-      if (this.listService.findTask(id)) {
-        if (id != body.id && this.listService.findTask(id)) {
-          return;
+      if (await this.listService.getTaskById(id)) {
+        if (id != body.id && await this.listService.taskExist(id)) {
+          throw new BadRequestException({
+            message: 'Please enter a valid id.',
+          });
         }
-        this.listService.update(id, body);
+        await this.listService.updateTask(id, body);
         return {
           message: 'Data update',
           content: body,
@@ -87,9 +90,9 @@ export class ListController {
     }
   }
   @Delete(':id')
-  removeTask(@Param('id') id: number) {
-    if (this.listService.findTask(id)) {
-      this.listService.removeTask(id);
+  async removeTask(@Param('id') id: number) {
+    if (await this.listService.taskExist(id)) {
+      await this.listService.removeTask(id);
       return {
         message: 'data removed',
       };
