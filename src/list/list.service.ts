@@ -7,33 +7,40 @@ import { Repository } from 'typeorm';
 export class ListService {
   constructor(
     @InjectRepository(Task)
-    private readonly ListRepository: Repository<Task>,
+    private readonly listRepository: Repository<Task>,
   ) {}
-  async tasks() {
+
+  async getTasks(): Promise<number[]> {
+    const data = await this.listRepository.find();
     const keys = [];
-    const data = await this.ListRepository.find();
-    data.forEach((task) => {
-      keys.push(task.id);
-    });
+    data.forEach(item=>keys.push(item.id))
     return keys;
   }
-  async findTask(id: number) {
-    const data = await this.ListRepository.find();
-    return data.find((item) => item.id === +id);
+
+  async getTaskById(id: number){
+    const task = await this.listRepository.findOne({ where: { id } });
+    return task;
   }
-  createTask(task: Task) {
-    const data = this.ListRepository.create(task);
-    return this.ListRepository.save(data);
+  async taskExist(id:number){
+    const data = await this.getTaskById(id)
+    return data
   }
-  async update(id: number, updatedData: Task) {
-    const data = await this.ListRepository.preload({
+
+  async createTask(task: Task): Promise<Task> {
+    const newTask = this.listRepository.create(task);
+    return await this.listRepository.save(newTask);
+  }
+
+  async updateTask(id: number, updatedData: Partial<Task>): Promise<Task> {
+    const task = await this.listRepository.preload({
       id: +id,
       ...updatedData,
     });
-    return this.ListRepository.save(data);
+    return await this.listRepository.save(task);
   }
-  async removeTask(id: number) {
-    const data = await this.findTask(id);
-    return this.ListRepository.remove(data);
+
+  async removeTask(id: number): Promise<void> {
+    const task = await this.getTaskById(id);
+    await this.listRepository.remove(task);
   }
 }
