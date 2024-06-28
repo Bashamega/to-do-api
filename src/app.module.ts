@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ListController } from './list/list.controller';
-import { ListService } from './list/list.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ListModule } from './list/list.module';
 @Module({
@@ -16,7 +14,7 @@ import { ListModule } from './list/list.module';
     autoLoadEntities: true,
     synchronize: true
   }), ListModule],
-  controllers: [AppController, ListController],
-  providers: [AppService, ListService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
